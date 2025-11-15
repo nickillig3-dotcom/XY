@@ -9,11 +9,23 @@ from src.strategy_generator import generate_ma_crossover_candidates
 from src.backtest import backtest_all
 from src.evaluation import evaluate_and_save
 from src.forward_test import forward_test_all, save_metrics_and_eval
+from src.forward_multi import run_forward_multi
 from src.portfolio_engine import build_portfolio
 from src.execution import run_paper
 
 def _key_no_tf(d: dict) -> str:
     return f"{d['symbol']}|{int(d['fast'])}|{int(d['slow'])}|{float(d['stop_loss_pct'])}"
+
+def _cfgget(root, path: str, default=None):
+    cur = root
+    for key in path.split('.'):
+        if isinstance(cur, dict):
+            cur = cur.get(key, None)
+        else:
+            cur = getattr(cur, key, None)
+        if cur is None:
+            return default
+    return cur
 
 def run(phase: str):
     cfg = load_config("config/config.yaml")
@@ -26,6 +38,15 @@ def run(phase: str):
     port_dir = Path("./results/portfolios")
     for p in (backtest_dir, forward_dir, port_dir):
         p.mkdir(parents=True, exist_ok=True)
+
+    # Config-Parameter
+    corr_cap   = _cfgget(cfg, "portfolio.corr_cap", 0.60)
+    max_w      = _cfgget(cfg, "portfolio.max_w_per_strategy", 0.40)
+    market_cap = _cfgget(cfg, "portfolio.max_w_per_market", 0.60)
+    oos_frac   = _cfgget(cfg, "forward.oos_fraction", 0.60)
+    n_splits   = int(_cfgget(cfg, "forward.n_splits", 1))
+    min_passes = int(_cfgget(cfg, "forward.min_passes", n_splits))
+    pb_days    = int(_cfgget(cfg, "paper.lookback_days", 14))
 
     strategies = None
 
@@ -77,10 +98,16 @@ def run(phase: str):
         else:
             acc_data = loads(base_strats_path.read_text(encoding="utf-8"))
         strategies = [StrategyConfig(**d) for d in acc_data]
-        df_fwd = forward_test_all(strategies, cfg, ohlcv_dir, oos_fraction=0.60)
-        (forward_dir / "strategies.json").write_text(dumps([s.model_dump() for s in strategies], indent=2), encoding="utf-8")
-        save_metrics_and_eval(df_fwd, forward_dir / "strategies.json", forward_dir)
-        print(f"[OK] Forward-test done -> {forward_dir / 'metrics.csv'}")
+
+        if n_splits <= 1:
+            df_fwd = forward_test_all(strategies, cfg, ohlcv_dir, oos_fraction=oos_frac)
+            (forward_dir / "strategies.json").write_text(dumps([s.model_dump() for s in strategies], indent=2), encoding="utf-8")
+            save_metrics_and_eval(df_fwd, forward_dir / "strategies.json", forward_dir)
+            print(f"[OK] Forward-test done -> {forward_dir / 'metrics.csv'}")
+        else:
+            res = run_forward_multi(strategies, cfg, ohlcv_dir, forward_dir, total_oos_frac=oos_frac, n_splits=n_splits, min_passes=min_passes)
+            print(f"[OK] Multi-forward done ({res['splits']} splits, min_passes={res['min_passes']}) -> {res['out_dir']}")
+            print(f"    per-split accepted: {res['per_split_counts']} | aggregated accepted: {res['accepted_aggregated']}")
 
     if phase in ("portfolio", "all"):
         bt_acc_f = backtest_dir / "accepted_strategies.json"
@@ -99,7 +126,7 @@ def run(phase: str):
             print(f"[OK] Using intersection Backtest&Forward -> {tmp}")
 
         res, port_eq = build_portfolio(cfg, src_for_portfolio, ohlcv_dir,
-                                       corr_cap=0.60, max_w=0.40, market_cap=0.60)
+                                       corr_cap=corr_cap, max_w=max_w, market_cap=market_cap)
         if not res["selected"]:
             print("[WARN] No portfolio built (no accepted or all too correlated).")
         else:
@@ -111,7 +138,7 @@ def run(phase: str):
                 print(f"[OK] Saved equity  -> {port_dir / 'portfolio_equity.parquet'}")
 
     if phase in ("paper", "all"):
-        out = run_paper(lookback_days=14)
+        out = run_paper(lookback_days=pb_days)
         print(f"[OK] Paper run: {out}")
 
 def main():

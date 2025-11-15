@@ -1,4 +1,4 @@
-markets:
+﻿markets:
   - BTCUSDT
   - ETHUSDT
   - SOLUSDT
@@ -12,3 +12,20 @@ risk:
   risk_per_trade_target: 0.01   # 1.0% Ziel (zulässiges Band 0.25–1.5%)
   risk_per_trade_max: 0.02      # 2.0% Hard Cap
   max_leverage: 5               # System Cap 5x
+# ---- optional tuning (added by patches) ----
+portfolio:
+  correlation_cap: 0.60
+  max_weight_per_strategy: 0.40
+  max_weight_per_market: 0.60
+
+forward:
+  n_splits: 3
+  min_passes: 3
+  n_splits: 3
+  min_passes: 3
+  oos_fraction: 0.60
+
+paper:
+  lookback_days: 14
+
+
