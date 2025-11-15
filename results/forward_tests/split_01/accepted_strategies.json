@@ -1,20 +1,6 @@
 [
   {
     "symbol": "BTCUSDT",
-    "fast": 18,
-    "slow": 37,
-    "stop_loss_pct": 0.01,
-    "risk_fraction": 0.01,
-    "direction": "both",
-    "timeframe": "15m",
-    "fee_rate": 0.0004,
-    "slippage": 0.0002,
-    "trend_tol": 0.0,
-    "atr_thresh": 0.002,
-    "atr_period": 14
-  },
-  {
-    "symbol": "BTCUSDT",
     "fast": 16,
     "slow": 43,
     "stop_loss_pct": 0.005,
@@ -25,20 +11,6 @@
     "slippage": 0.0002,
     "trend_tol": 0.0,
     "atr_thresh": 0.002,
-    "atr_period": 14
-  },
-  {
-    "symbol": "BTCUSDT",
-    "fast": 17,
-    "slow": 60,
-    "stop_loss_pct": 0.01,
-    "risk_fraction": 0.01,
-    "direction": "both",
-    "timeframe": "15m",
-    "fee_rate": 0.0004,
-    "slippage": 0.0002,
-    "trend_tol": 0.0,
-    "atr_thresh": 0.0,
     "atr_period": 14
   },
   {
@@ -53,6 +25,20 @@
     "slippage": 0.0002,
     "trend_tol": 0.0,
     "atr_thresh": 0.005,
+    "atr_period": 14
+  },
+  {
+    "symbol": "SOLUSDT",
+    "fast": 13,
+    "slow": 50,
+    "stop_loss_pct": 0.01,
+    "risk_fraction": 0.01,
+    "direction": "both",
+    "timeframe": "15m",
+    "fee_rate": 0.0004,
+    "slippage": 0.0002,
+    "trend_tol": 0.0,
+    "atr_thresh": 0.0,
     "atr_period": 14
   }
 ]

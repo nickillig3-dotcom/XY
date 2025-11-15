@@ -1,18 +1,20 @@
 {
   "selected": [
-    "BTCUSDT|f5|s35|sl0.0100|15m",
-    "SOLUSDT|f4|s35|sl0.0200|15m",
-    "SOLUSDT|f7|s31|sl0.0150|5m"
+    "BTCUSDT|f17|s60|sl0.0100|15m",
+    "BTCUSDT|f18|s37|sl0.0100|15m",
+    "BTCUSDT|f16|s43|sl0.0050|15m",
+    "SOLUSDT|f14|s29|sl0.0100|15m"
   ],
   "weights": {
-    "BTCUSDT|f5|s35|sl0.0100|15m": 0.4,
-    "SOLUSDT|f4|s35|sl0.0200|15m": 0.3350980795777058,
-    "SOLUSDT|f7|s31|sl0.0150|5m": 0.26490192042229416
+    "BTCUSDT|f17|s60|sl0.0100|15m": 0.2101996529346317,
+    "BTCUSDT|f18|s37|sl0.0100|15m": 0.2420697640669572,
+    "BTCUSDT|f16|s43|sl0.0050|15m": 0.14773058299841108,
+    "SOLUSDT|f14|s29|sl0.0100|15m": 0.4000000000000001
   },
   "metrics": {
-    "n_strategies": 3,
-    "avg_monthly_return": 0.06499166226622899,
-    "worst_month": 0.06499166226622899,
-    "max_drawdown": -0.08190057122128547
+    "n_strategies": 4,
+    "avg_monthly_return": 0.2020166917802999,
+    "worst_month": 0.2020166917802999,
+    "max_drawdown": -0.06404660863449063
   }
 }

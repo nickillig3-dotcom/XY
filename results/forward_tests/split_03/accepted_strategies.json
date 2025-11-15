@@ -15,8 +15,8 @@
   },
   {
     "symbol": "BTCUSDT",
-    "fast": 16,
-    "slow": 43,
+    "fast": 6,
+    "slow": 53,
     "stop_loss_pct": 0.005,
     "risk_fraction": 0.01,
     "direction": "both",

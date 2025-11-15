@@ -14,6 +14,8 @@ DEFAULTS = {
     },
     "paper": {
         "lookback_days": 14,
+        "poll_seconds": 300,
+        "analyze_trades": True,
     },
 }
 
@@ -28,7 +30,7 @@ def load_extras(cfg_path: str = "config/config.yaml") -> dict:
     out = {}
     for section, defs in DEFAULTS.items():
         sec = data.get(section, {}) or {}
-        merged = dict(defs)           # Defaults
-        merged.update(sec)            # ALLE Keys aus YAML durchreichen
+        merged = dict(defs)
+        merged.update(sec)  # alle YAML-Keys durchreichen
         out[section] = merged
     return out

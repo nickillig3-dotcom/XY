@@ -42,17 +42,17 @@
     "atr_period": 14
   },
   {
-    "symbol": "SOLUSDT",
-    "fast": 14,
-    "slow": 29,
-    "stop_loss_pct": 0.01,
+    "symbol": "ETHUSDT",
+    "fast": 16,
+    "slow": 49,
+    "stop_loss_pct": 0.015,
     "risk_fraction": 0.01,
     "direction": "both",
     "timeframe": "15m",
     "fee_rate": 0.0004,
     "slippage": 0.0002,
     "trend_tol": 0.0,
-    "atr_thresh": 0.005,
+    "atr_thresh": 0.002,
     "atr_period": 14
   }
 ]

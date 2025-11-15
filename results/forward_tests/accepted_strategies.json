@@ -1,68 +1,58 @@
 [
   {
     "symbol": "BTCUSDT",
-    "timeframe": "15m",
-    "fast": 5,
-    "slow": 35,
-    "stop_loss_pct": 0.01,
+    "fast": 16,
+    "slow": 43,
+    "stop_loss_pct": 0.005,
     "risk_fraction": 0.01,
+    "direction": "both",
+    "timeframe": "15m",
     "fee_rate": 0.0004,
     "slippage": 0.0002,
-    "direction": "both"
+    "trend_tol": 0.0,
+    "atr_thresh": 0.002,
+    "atr_period": 14
+  },
+  {
+    "symbol": "SOLUSDT",
+    "fast": 14,
+    "slow": 29,
+    "stop_loss_pct": 0.01,
+    "risk_fraction": 0.01,
+    "direction": "both",
+    "timeframe": "15m",
+    "fee_rate": 0.0004,
+    "slippage": 0.0002,
+    "trend_tol": 0.0,
+    "atr_thresh": 0.005,
+    "atr_period": 14
   },
   {
     "symbol": "BTCUSDT",
-    "timeframe": "15m",
-    "fast": 5,
+    "fast": 18,
     "slow": 37,
-    "stop_loss_pct": 0.015,
+    "stop_loss_pct": 0.01,
     "risk_fraction": 0.01,
-    "fee_rate": 0.0004,
-    "slippage": 0.0002,
-    "direction": "both"
-  },
-  {
-    "symbol": "SOLUSDT",
+    "direction": "both",
     "timeframe": "15m",
-    "fast": 6,
-    "slow": 28,
-    "stop_loss_pct": 0.015,
-    "risk_fraction": 0.01,
     "fee_rate": 0.0004,
     "slippage": 0.0002,
-    "direction": "both"
+    "trend_tol": 0.0,
+    "atr_thresh": 0.002,
+    "atr_period": 14
   },
   {
-    "symbol": "SOLUSDT",
+    "symbol": "BTCUSDT",
+    "fast": 17,
+    "slow": 60,
+    "stop_loss_pct": 0.01,
+    "risk_fraction": 0.01,
+    "direction": "both",
     "timeframe": "15m",
-    "fast": 8,
-    "slow": 25,
-    "stop_loss_pct": 0.02,
-    "risk_fraction": 0.01,
     "fee_rate": 0.0004,
     "slippage": 0.0002,
-    "direction": "both"
-  },
-  {
-    "symbol": "SOLUSDT",
-    "timeframe": "5m",
-    "fast": 7,
-    "slow": 31,
-    "stop_loss_pct": 0.015,
-    "risk_fraction": 0.01,
-    "fee_rate": 0.0004,
-    "slippage": 0.0002,
-    "direction": "both"
-  },
-  {
-    "symbol": "SOLUSDT",
-    "timeframe": "15m",
-    "fast": 4,
-    "slow": 35,
-    "stop_loss_pct": 0.02,
-    "risk_fraction": 0.01,
-    "fee_rate": 0.0004,
-    "slippage": 0.0002,
-    "direction": "both"
+    "trend_tol": 0.0,
+    "atr_thresh": 0.0,
+    "atr_period": 14
   }
 ]

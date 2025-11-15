@@ -20,12 +20,17 @@ portfolio:
 
 forward:
   n_splits: 3
-  min_passes: 3
+  min_passes: 2
   n_splits: 3
-  min_passes: 3
+  min_passes: 2
   oos_fraction: 0.60
 
 paper:
-  lookback_days: 14
+  poll_seconds: 300
+  analyze_trades: true
+  lookback_days: 30
+
+
+
 
 

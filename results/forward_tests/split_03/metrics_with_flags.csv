@@ -1,0 +1,7 @@
+symbol,timeframe,fast,slow,stop_loss_pct,trades,net_return,max_drawdown,avg_monthly_return,worst_month,reason,is_accepted
+BTCUSDT,15m,5,35,0.01,32,0.1044410386473584,-0.0643018531329869,0.0,0.0,avg_monthly_return<2.00%;trades<50,False
+BTCUSDT,15m,5,37,0.015,32,0.0676765754233077,-0.0447661971489585,0.0,0.0,avg_monthly_return<2.00%;trades<50,False
+SOLUSDT,15m,6,28,0.015,39,0.0732855252216779,-0.0417665544158516,0.0,0.0,avg_monthly_return<2.00%;trades<50,False
+SOLUSDT,15m,8,25,0.02,41,0.0212838233283494,-0.0472977982976021,0.0,0.0,avg_monthly_return<2.00%;trades<50,False
+SOLUSDT,5m,7,31,0.015,89,0.0300692523423924,-0.0539080086617856,0.0,0.0,avg_monthly_return<2.00%,False
+SOLUSDT,15m,4,35,0.02,37,0.0498062207170437,-0.0323577665615254,0.0,0.0,avg_monthly_return<2.00%;trades<50,False

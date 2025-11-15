@@ -1,33 +1,42 @@
 {
   "status": "ok",
-  "lookback_days": 14,
+  "lookback_days": 30,
   "used": [
     {
-      "key": "BTCUSDT|f5|s35|sl0.0100|15m",
-      "weight": 0.4,
+      "key": "BTCUSDT|f17|s60|sl0.0100|15m",
+      "weight": 0.2101996529346317,
       "symbol": "BTCUSDT",
       "timeframe": "15m",
-      "fast": 5,
-      "slow": 35,
+      "fast": 17,
+      "slow": 60,
       "stop_loss_pct": 0.01
     },
     {
-      "key": "SOLUSDT|f4|s35|sl0.0200|15m",
-      "weight": 0.3350980795777058,
-      "symbol": "SOLUSDT",
+      "key": "BTCUSDT|f18|s37|sl0.0100|15m",
+      "weight": 0.2420697640669572,
+      "symbol": "BTCUSDT",
       "timeframe": "15m",
-      "fast": 4,
-      "slow": 35,
-      "stop_loss_pct": 0.02
+      "fast": 18,
+      "slow": 37,
+      "stop_loss_pct": 0.01
     },
     {
-      "key": "SOLUSDT|f7|s31|sl0.0150|5m",
-      "weight": 0.26490192042229416,
+      "key": "BTCUSDT|f16|s43|sl0.0050|15m",
+      "weight": 0.14773058299841108,
+      "symbol": "BTCUSDT",
+      "timeframe": "15m",
+      "fast": 16,
+      "slow": 43,
+      "stop_loss_pct": 0.005
+    },
+    {
+      "key": "SOLUSDT|f14|s29|sl0.0100|15m",
+      "weight": 0.4000000000000001,
       "symbol": "SOLUSDT",
-      "timeframe": "5m",
-      "fast": 7,
-      "slow": 31,
-      "stop_loss_pct": 0.015
+      "timeframe": "15m",
+      "fast": 14,
+      "slow": 29,
+      "stop_loss_pct": 0.01
     }
   ]
 }

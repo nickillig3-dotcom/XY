@@ -1,0 +1,12 @@
+{
+  "sum_weights": 1.0,
+  "max_w_per_strategy": 0.4,
+  "max_w_per_market": 0.6,
+  "correlation_cap": 0.6,
+  "enb": 3.5136294927346055,
+  "violations": {
+    "strategy_weights": [],
+    "market_caps": [],
+    "correlations": []
+  }
+}
