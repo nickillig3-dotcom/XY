@@ -1,0 +1,122 @@
+[
+  {
+    "symbol": "BTCUSDT",
+    "fast": 8,
+    "slow": 14,
+    "stop_loss_pct": 0.008,
+    "risk_fraction": 0.01,
+    "fee_rate": 0.0004,
+    "slippage": 0.0002,
+    "direction": "both"
+  },
+  {
+    "symbol": "BTCUSDT",
+    "fast": 12,
+    "slow": 31,
+    "stop_loss_pct": 0.005,
+    "risk_fraction": 0.01,
+    "fee_rate": 0.0004,
+    "slippage": 0.0002,
+    "direction": "both"
+  },
+  {
+    "symbol": "BTCUSDT",
+    "fast": 8,
+    "slow": 56,
+    "stop_loss_pct": 0.003,
+    "risk_fraction": 0.01,
+    "fee_rate": 0.0004,
+    "slippage": 0.0002,
+    "direction": "both"
+  },
+  {
+    "symbol": "BTCUSDT",
+    "fast": 18,
+    "slow": 25,
+    "stop_loss_pct": 0.003,
+    "risk_fraction": 0.01,
+    "fee_rate": 0.0004,
+    "slippage": 0.0002,
+    "direction": "both"
+  },
+  {
+    "symbol": "ETHUSDT",
+    "fast": 7,
+    "slow": 25,
+    "stop_loss_pct": 0.005,
+    "risk_fraction": 0.01,
+    "fee_rate": 0.0004,
+    "slippage": 0.0002,
+    "direction": "both"
+  },
+  {
+    "symbol": "ETHUSDT",
+    "fast": 5,
+    "slow": 45,
+    "stop_loss_pct": 0.005,
+    "risk_fraction": 0.01,
+    "fee_rate": 0.0004,
+    "slippage": 0.0002,
+    "direction": "both"
+  },
+  {
+    "symbol": "ETHUSDT",
+    "fast": 18,
+    "slow": 37,
+    "stop_loss_pct": 0.01,
+    "risk_fraction": 0.01,
+    "fee_rate": 0.0004,
+    "slippage": 0.0002,
+    "direction": "both"
+  },
+  {
+    "symbol": "ETHUSDT",
+    "fast": 13,
+    "slow": 18,
+    "stop_loss_pct": 0.005,
+    "risk_fraction": 0.01,
+    "fee_rate": 0.0004,
+    "slippage": 0.0002,
+    "direction": "both"
+  },
+  {
+    "symbol": "SOLUSDT",
+    "fast": 18,
+    "slow": 44,
+    "stop_loss_pct": 0.008,
+    "risk_fraction": 0.01,
+    "fee_rate": 0.0004,
+    "slippage": 0.0002,
+    "direction": "both"
+  },
+  {
+    "symbol": "SOLUSDT",
+    "fast": 9,
+    "slow": 27,
+    "stop_loss_pct": 0.008,
+    "risk_fraction": 0.01,
+    "fee_rate": 0.0004,
+    "slippage": 0.0002,
+    "direction": "both"
+  },
+  {
+    "symbol": "SOLUSDT",
+    "fast": 8,
+    "slow": 18,
+    "stop_loss_pct": 0.01,
+    "risk_fraction": 0.01,
+    "fee_rate": 0.0004,
+    "slippage": 0.0002,
+    "direction": "both"
+  },
+  {
+    "symbol": "SOLUSDT",
+    "fast": 8,
+    "slow": 35,
+    "stop_loss_pct": 0.008,
+    "risk_fraction": 0.01,
+    "fee_rate": 0.0004,
+    "slippage": 0.0002,
+    "direction": "both"
+  }
+]
