@@ -36,3 +36,4 @@ def save_processed_ohlcv(dfs: Dict[str, pd.DataFrame], out_dir: str | Path) -> N
     out_dir.mkdir(parents=True, exist_ok=True)
     for symbol, df in dfs.items():
         df.to_parquet(out_dir / f"{symbol}_1m.parquet")
+

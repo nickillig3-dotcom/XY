@@ -7,6 +7,7 @@ from src.data_loader import load_all_markets, save_processed_ohlcv
 from src.features import build_features_for_markets
 from src.strategy_generator import generate_ma_crossover_candidates
 from src.backtest import backtest_all
+from src.evaluation import evaluate_and_save
 
 def run(phase: str):
     cfg = load_config("config/config.yaml")
@@ -29,7 +30,7 @@ def run(phase: str):
         print(f"[OK] Saved basic features to: {feats_dir}")
 
     if phase in ("search", "all"):
-        strategies = generate_ma_crossover_candidates(cfg.markets, cfg.risk.risk_per_trade_target, n_per_symbol=4)
+        strategies = generate_ma_crossover_candidates(cfg.markets, cfg.risk.risk_per_trade_target, n_per_symbol=20)
         with (results_dir / "strategies.json").open("w", encoding="utf-8") as f:
             f.write(dumps([s.model_dump() for s in strategies], indent=2))
         print(f"[OK] Generated {len(strategies)} strategy candidates -> {results_dir / 'strategies.json'}")
@@ -38,18 +39,15 @@ def run(phase: str):
         if strategies is None:
             path = results_dir / "strategies.json"
             if not path.exists():
-                # Fallback: on-the-fly generieren, falls nicht vorhanden
-                strategies = generate_ma_crossover_candidates(cfg.markets, cfg.risk.risk_per_trade_target, n_per_symbol=4)
+                strategies = generate_ma_crossover_candidates(cfg.markets, cfg.risk.risk_per_trade_target, n_per_symbol=20)
             else:
                 data = loads(path.read_text(encoding="utf-8"))
                 from src.strategy_blocks import StrategyConfig
                 strategies = [StrategyConfig(**d) for d in data]
-
         df = backtest_all(strategies, cfg, ohlcv_dir)
         out_csv = results_dir / "metrics.csv"
         df.to_csv(out_csv, index=False)
         print(f"[OK] Backtests done -> {out_csv}")
-        # Top 5 anzeigen
         try:
             top = df.sort_values("net_return", ascending=False).head(5)
             print("\nTop 5 (net_return):")
@@ -57,9 +55,14 @@ def run(phase: str):
         except Exception as e:
             print(f"Could not print top results: {e}")
 
+    if phase in ("evaluate", "all"):
+        df2 = evaluate_and_save(str(results_dir / "metrics.csv"), str(results_dir / "strategies.json"), str(results_dir))
+        acc = int(df2["is_accepted"].sum())
+        print(f"[OK] Evaluation done. Accepted: {acc} / {len(df2)}")
+
 def main():
-    parser = argparse.ArgumentParser(description="Local Perp Futures Engine — pipeline")
-    parser.add_argument("--phase", choices=["data","features","search","backtest","all"], default="all")
+    parser = argparse.ArgumentParser(description="Local Perp Futures Engine - pipeline")
+    parser.add_argument("--phase", choices=["data","features","search","backtest","evaluate","all"], default="all")
     args = parser.parse_args()
     run(args.phase)
 

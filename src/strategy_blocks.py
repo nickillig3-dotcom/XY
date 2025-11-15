@@ -18,3 +18,4 @@ class StrategyConfig(BaseModel):
         if self.direction not in ("long", "short", "both"):
             raise ValueError("direction must be 'long', 'short', or 'both'")
         return self
+

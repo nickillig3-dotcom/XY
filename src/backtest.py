@@ -1,4 +1,4 @@
-from __future__ import annotations
+ï»¿from __future__ import annotations
 from pathlib import Path
 from typing import Dict, List
 import pandas as pd
@@ -8,7 +8,7 @@ from .config_loader import GlobalConfig
 
 def _load_ohlcv(symbol: str, ohlcv_dir: Path) -> pd.DataFrame:
     df = pd.read_parquet(ohlcv_dir / f"{symbol}_1m.parquet")
-    # Sicherstellen: benötigte Spalten vorhanden
+    # Sicherstellen: benÃ¶tigte Spalten vorhanden
     cols = {"open","high","low","close","volume"}
     missing = cols - set(df.columns)
     if missing:
@@ -91,7 +91,7 @@ def backtest_one(df: pd.DataFrame, strat: StrategyConfig, starting_capital: floa
                     stop  = entry * (1 - strat.stop_loss_pct)
                     stop_dist = entry - stop
                     if stop_dist > 0:
-                        # Positionsgröße via Risiko/Stop + Leveragecap
+                        # PositionsgrÃ¶ÃŸe via Risiko/Stop + Leveragecap
                         qty_notional = risk_amt * entry / stop_dist
                         notional_cap = equity * max_leverage
                         qty_notional = min(qty_notional, notional_cap)
@@ -142,3 +142,4 @@ def backtest_all(strategies: List[StrategyConfig], cfg: GlobalConfig, ohlcv_dir:
         results.append(m)
     df = pd.DataFrame(results)
     return df
+

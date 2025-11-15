@@ -44,3 +44,4 @@ def load_config(path: str | Path) -> GlobalConfig:
         raw = yaml.safe_load(f)
     cfg = GlobalConfig(**raw)
     return cfg
+

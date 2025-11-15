@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 from pathlib import Path
 from typing import Iterable
 import numpy as np
@@ -7,7 +7,7 @@ import pandas as pd
 def make_basic_features(ohlcv: pd.DataFrame) -> pd.DataFrame:
     """
     Erwartet OHLCV mit Index=UTC-Timestamps (1m), Spalten: open, high, low, close, volume.
-    Gibt Baseline-Features zurück.
+    Gibt Baseline-Features zurÃ¼ck.
     """
     df = pd.DataFrame(index=ohlcv.index)
     close = ohlcv["close"].astype(float)
@@ -30,3 +30,4 @@ def build_features_for_markets(markets: Iterable[str], ohlcv_dir: str | Path, ou
         raw = pd.read_parquet(src)
         feats = make_basic_features(raw)
         feats.to_parquet(out_dir / f"{symbol}_features.parquet")
+

@@ -17,3 +17,4 @@ def generate_ma_crossover_candidates(markets: Iterable[str], risk_fraction: floa
                 direction="both"
             ))
     return out
+
