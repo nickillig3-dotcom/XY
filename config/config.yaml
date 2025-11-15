@@ -1,0 +1,14 @@
+markets:
+  - BTCUSDT
+  - ETHUSDT
+  - SOLUSDT
+
+paths:
+  raw: "./data/raw"
+  processed: "./data/processed"
+
+risk:
+  starting_capital: 10000
+  risk_per_trade_target: 0.01   # 1.0% Ziel (zulässiges Band 0.25–1.5%)
+  risk_per_trade_max: 0.02      # 2.0% Hard Cap
+  max_leverage: 5               # System Cap 5x

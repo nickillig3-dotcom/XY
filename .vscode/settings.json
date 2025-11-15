@@ -1,0 +1,7 @@
+﻿{
+    "python.terminal.activateEnvironment":  true,
+    "python.analysis.extraPaths":  [
+                                       "./src"
+                                   ],
+    "python.defaultInterpreterPath":  "C:\\XY\\venv\\Scripts\\python.exe"
+}
