@@ -3,13 +3,14 @@ from pydantic import BaseModel, Field, model_validator
 
 class StrategyConfig(BaseModel):
     symbol: str
-    fast: int = Field(ge=5, le=300)
-    slow: int = Field(ge=10, le=600)
-    stop_loss_pct: float = Field(gt=0, lt=0.2)   # 0.003 = 0.3%
-    risk_fraction: float = Field(gt=0, lt=0.05)  # Anteil Equity pro Trade
-    fee_rate: float = Field(default=0.0004, ge=0)  # 4 bp pro Seite (Beispiel)
-    slippage: float = Field(default=0.0002, ge=0)  # 2 bp Slippage
-    direction: str = Field(default="both")         # "long" | "short" | "both"
+    timeframe: str = Field(default="1m")  # "1m" | "5m" | "15m"
+    fast: int = Field(ge=3, le=300)
+    slow: int = Field(ge=5, le=600)
+    stop_loss_pct: float = Field(gt=0, lt=0.2)
+    risk_fraction: float = Field(gt=0, lt=0.05)
+    fee_rate: float = Field(default=0.0004, ge=0)
+    slippage: float = Field(default=0.0002, ge=0)
+    direction: str = Field(default="both")  # "long" | "short" | "both"
 
     @model_validator(mode="after")
     def _check(self):
@@ -17,5 +18,6 @@ class StrategyConfig(BaseModel):
             raise ValueError("fast must be < slow")
         if self.direction not in ("long", "short", "both"):
             raise ValueError("direction must be 'long', 'short', or 'both'")
+        if self.timeframe not in ("1m", "5m", "15m"):
+            raise ValueError("timeframe must be one of: 1m, 5m, 15m")
         return self
-

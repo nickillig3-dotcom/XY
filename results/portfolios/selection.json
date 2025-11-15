@@ -1,0 +1,18 @@
+{
+  "selected": [
+    "BTCUSDT|f5|s35|sl0.0100|15m",
+    "SOLUSDT|f4|s35|sl0.0200|15m",
+    "SOLUSDT|f7|s31|sl0.0150|5m"
+  ],
+  "weights": {
+    "BTCUSDT|f5|s35|sl0.0100|15m": 0.4,
+    "SOLUSDT|f4|s35|sl0.0200|15m": 0.33509538629600094,
+    "SOLUSDT|f7|s31|sl0.0150|5m": 0.264904613703999
+  },
+  "metrics": {
+    "n_strategies": 3,
+    "avg_monthly_return": 0.06497480744604012,
+    "worst_month": 0.06497480744604012,
+    "max_drawdown": -0.08189051926541857
+  }
+}

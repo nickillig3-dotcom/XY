@@ -8,13 +8,20 @@ from .config_loader import GlobalConfig
 
 def _load_ohlcv(symbol: str, ohlcv_dir: Path) -> pd.DataFrame:
     df = pd.read_parquet(ohlcv_dir / f"{symbol}_1m.parquet")
-    # Sicherstellen: benötigte Spalten vorhanden
     cols = {"open","high","low","close","volume"}
     missing = cols - set(df.columns)
     if missing:
         raise ValueError(f"{symbol}: missing columns in processed OHLCV: {missing}")
     df = df.sort_index()
     return df
+
+def _resample_ohlcv(df: pd.DataFrame, timeframe: str) -> pd.DataFrame:
+    if timeframe == "1m":
+        return df
+    rule = {"5m": "5min", "15m": "15min"}[timeframe]
+    agg = {"open":"first", "high":"max", "low":"min", "close":"last", "volume":"sum"}
+    out = df.resample(rule).agg(agg).dropna()
+    return out
 
 def _max_drawdown(equity: pd.Series) -> float:
     peak = equity.cummax()
@@ -30,7 +37,8 @@ def _monthly_stats(equity: pd.Series) -> Dict[str, float]:
     return {"avg_monthly_return": float(m.mean()), "worst_month": float(m.min())}
 
 def backtest_one(df: pd.DataFrame, strat: StrategyConfig, starting_capital: float, max_leverage: float) -> Dict:
-    close = df["close"].astype(float)
+    df_tf = _resample_ohlcv(df, strat.timeframe)
+    close = df_tf["close"].astype(float)
     ma_f = close.rolling(strat.fast, min_periods=strat.fast).mean()
     ma_s = close.rolling(strat.slow, min_periods=strat.slow).mean()
     long_entry  = (ma_f.shift(1) <= ma_s.shift(1)) & (ma_f > ma_s)
@@ -38,7 +46,7 @@ def backtest_one(df: pd.DataFrame, strat: StrategyConfig, starting_capital: floa
 
     equity = float(starting_capital)
     equity_track = []
-    pos = 0           # 0 = flat, 1 = long, -1 = short
+    pos = 0
     qty = 0.0
     entry_price = 0.0
     stop_price = 0.0
@@ -46,21 +54,19 @@ def backtest_one(df: pd.DataFrame, strat: StrategyConfig, starting_capital: floa
     fee_rate = strat.fee_rate
     slip = strat.slippage
 
-    for t, row in df.iterrows():
+    for t, row in df_tf.iterrows():
         price = float(row["close"])
         high  = float(row["high"])
         low   = float(row["low"])
 
-        # Exit-Logik (Stop first, dann Gegensignal)
+        # Exit-Logik
         if pos == 1:
-            # Stop-Loss
             if low <= stop_price:
                 exit_px = stop_price * (1 - slip)
                 pnl = (exit_px - entry_price) * qty
                 fee = abs(exit_px * qty) * fee_rate
                 equity += pnl - fee
                 pos = 0; qty = 0.0
-            # Gegensignal
             elif short_entry.get(t, False):
                 exit_px = price * (1 - slip)
                 pnl = (exit_px - entry_price) * qty
@@ -71,7 +77,7 @@ def backtest_one(df: pd.DataFrame, strat: StrategyConfig, starting_capital: floa
         elif pos == -1:
             if high >= stop_price:
                 exit_px = stop_price * (1 + slip)
-                pnl = (entry_price - exit_px) * qty  # short: Gewinn wenn Exit tiefer ist
+                pnl = (entry_price - exit_px) * qty
                 fee = abs(exit_px * qty) * fee_rate
                 equity += pnl - fee
                 pos = 0; qty = 0.0
@@ -82,7 +88,7 @@ def backtest_one(df: pd.DataFrame, strat: StrategyConfig, starting_capital: floa
                 equity += pnl - fee
                 pos = 0; qty = 0.0
 
-        # Entry-Logik (nur wenn flat)
+        # Entry (nur wenn flat)
         if pos == 0:
             risk_amt = equity * strat.risk_fraction
             if risk_amt > 0:
@@ -91,8 +97,7 @@ def backtest_one(df: pd.DataFrame, strat: StrategyConfig, starting_capital: floa
                     stop  = entry * (1 - strat.stop_loss_pct)
                     stop_dist = entry - stop
                     if stop_dist > 0:
-                        # Positionsgröße via Risiko/Stop + Leveragecap
-                        qty_notional = risk_amt * entry / stop_dist
+                        qty_notional = risk_amt * entry / stop_dist  # ~ risk / %SL
                         notional_cap = equity * max_leverage
                         qty_notional = min(qty_notional, notional_cap)
                         q = qty_notional / entry
@@ -122,6 +127,7 @@ def backtest_one(df: pd.DataFrame, strat: StrategyConfig, starting_capital: floa
     eq = pd.Series({t: v for t, v in equity_track}).sort_index()
     metrics = {
         "symbol": strat.symbol,
+        "timeframe": strat.timeframe,
         "fast": strat.fast,
         "slow": strat.slow,
         "stop_loss_pct": strat.stop_loss_pct,
@@ -142,4 +148,3 @@ def backtest_all(strategies: List[StrategyConfig], cfg: GlobalConfig, ohlcv_dir:
         results.append(m)
     df = pd.DataFrame(results)
     return df
-

@@ -1,5 +1,6 @@
-﻿from __future__ import annotations
-import argparse
+﻿# -*- coding: utf-8 -*-
+from __future__ import annotations
+import argparse, json
 from pathlib import Path
 from json import dumps, loads
 from src.config_loader import load_config
@@ -8,6 +9,12 @@ from src.features import build_features_for_markets
 from src.strategy_generator import generate_ma_crossover_candidates
 from src.backtest import backtest_all
 from src.evaluation import evaluate_and_save
+from src.forward_test import forward_test_all, save_metrics_and_eval
+from src.portfolio_engine import build_portfolio
+
+def _key_no_tf(d: dict) -> str:
+    # Schl�ssel ohne timeframe, um Backtest/Forward-Listen robust zu schneiden
+    return f"{d['symbol']}|{int(d['fast'])}|{int(d['slow'])}|{float(d['stop_loss_pct'])}"
 
 def run(phase: str):
     cfg = load_config("config/config.yaml")
@@ -15,8 +22,11 @@ def run(phase: str):
     processed_base = Path(cfg.paths.processed)
     ohlcv_dir = processed_base / "ohlcv"
     feats_dir = processed_base / "features"
-    results_dir = Path("./results/backtests")
-    results_dir.mkdir(parents=True, exist_ok=True)
+    backtest_dir = Path("./results/backtests")
+    forward_dir = Path("./results/forward_tests")
+    port_dir = Path("./results/portfolios")
+    for p in (backtest_dir, forward_dir, port_dir):
+        p.mkdir(parents=True, exist_ok=True)
 
     strategies = None
 
@@ -31,13 +41,12 @@ def run(phase: str):
 
     if phase in ("search", "all"):
         strategies = generate_ma_crossover_candidates(cfg.markets, cfg.risk.risk_per_trade_target, n_per_symbol=20)
-        with (results_dir / "strategies.json").open("w", encoding="utf-8") as f:
-            f.write(dumps([s.model_dump() for s in strategies], indent=2))
-        print(f"[OK] Generated {len(strategies)} strategy candidates -> {results_dir / 'strategies.json'}")
+        (backtest_dir / "strategies.json").write_text(dumps([s.model_dump() for s in strategies], indent=2), encoding="utf-8")
+        print(f"[OK] Generated {len(strategies)} strategy candidates -> {backtest_dir / 'strategies.json'}")
 
     if phase in ("backtest", "all"):
         if strategies is None:
-            path = results_dir / "strategies.json"
+            path = backtest_dir / "strategies.json"
             if not path.exists():
                 strategies = generate_ma_crossover_candidates(cfg.markets, cfg.risk.risk_per_trade_target, n_per_symbol=20)
             else:
@@ -45,26 +54,73 @@ def run(phase: str):
                 from src.strategy_blocks import StrategyConfig
                 strategies = [StrategyConfig(**d) for d in data]
         df = backtest_all(strategies, cfg, ohlcv_dir)
-        out_csv = results_dir / "metrics.csv"
+        out_csv = backtest_dir / "metrics.csv"
         df.to_csv(out_csv, index=False)
         print(f"[OK] Backtests done -> {out_csv}")
         try:
             top = df.sort_values("net_return", ascending=False).head(5)
             print("\nTop 5 (net_return):")
-            print(top[["symbol","fast","slow","stop_loss_pct","trades","net_return","max_drawdown","avg_monthly_return","worst_month"]].to_string(index=False))
+            print(top[["symbol","timeframe","fast","slow","stop_loss_pct","trades","net_return","max_drawdown","avg_monthly_return","worst_month"]].to_string(index=False))
         except Exception as e:
             print(f"Could not print top results: {e}")
 
     if phase in ("evaluate", "all"):
-        df2 = evaluate_and_save(str(results_dir / "metrics.csv"), str(results_dir / "strategies.json"), str(results_dir))
+        df2 = evaluate_and_save(str(backtest_dir / "metrics.csv"), str(backtest_dir / "strategies.json"), str(backtest_dir))
         acc = int(df2["is_accepted"].sum())
         print(f"[OK] Evaluation done. Accepted: {acc} / {len(df2)}")
 
+    if phase in ("forward", "all"):
+        # Forward-Test nur auf Backtest-accepted laufen lassen (schneller & sinnvoll)
+        acc_path = backtest_dir / "accepted_strategies.json"
+        base_strats_path = backtest_dir / "strategies.json"
+        from src.strategy_blocks import StrategyConfig
+        if acc_path.exists() and acc_path.read_text(encoding="utf-8").strip() not in ("", "[]"):
+            acc_data = loads(acc_path.read_text(encoding="utf-8"))
+        else:
+            acc_data = loads(base_strats_path.read_text(encoding="utf-8"))
+        strategies = [StrategyConfig(**d) for d in acc_data]
+
+        df_fwd = forward_test_all(strategies, cfg, ohlcv_dir, oos_fraction=0.60)
+        (forward_dir / "strategies.json").write_text(dumps([s.model_dump() for s in strategies], indent=2), encoding="utf-8")
+        save_metrics_and_eval(df_fwd, forward_dir / "strategies.json", forward_dir)
+        print(f"[OK] Forward-test done -> {forward_dir / 'metrics.csv'}")
+
+    if phase in ("portfolio", "all"):
+        # Wenn Forward-Akzeptierte existieren, benutze Schnittmenge BacktestnForward
+        bt_acc_f = backtest_dir / "accepted_strategies.json"
+        fwd_acc_f = forward_dir / "accepted_strategies.json"
+        use_forward = fwd_acc_f.exists() and fwd_acc_f.read_text(encoding="utf-8").strip() not in ("", "[]")
+
+        src_for_portfolio = bt_acc_f
+        if use_forward:
+            bt = loads(bt_acc_f.read_text(encoding="utf-8")) if bt_acc_f.exists() else []
+            fw = loads(fwd_acc_f.read_text(encoding="utf-8"))
+            fw_keys = {_key_no_tf(d) for d in fw}
+            inter = [d for d in bt if _key_no_tf(d) in fw_keys]
+            tmp = port_dir / "accepted_intersection.json"
+            tmp.write_text(dumps(inter, indent=2), encoding="utf-8")
+            src_for_portfolio = tmp
+            print(f"[OK] Using intersection BacktestnForward -> {tmp}")
+
+        res, port_eq = build_portfolio(cfg, src_for_portfolio, ohlcv_dir,
+                                       corr_cap=0.60, max_w=0.40, market_cap=0.60)
+        if not res["selected"]:
+            print("[WARN] No portfolio built (no accepted or all too correlated).")
+        else:
+            (port_dir / "selection.json").write_text(dumps(res, indent=2), encoding="utf-8")
+            if port_eq is not None:
+                port_eq.to_frame("equity").to_parquet(port_dir / "portfolio_equity.parquet")
+                print(f"[OK] Portfolio built: {res['metrics']}")
+                print(f"[OK] Saved weights -> {port_dir / 'selection.json'}")
+                print(f"[OK] Saved equity  -> {port_dir / 'portfolio_equity.parquet'}")
+
 def main():
-    parser = argparse.ArgumentParser(description="Local Perp Futures Engine - pipeline")
-    parser.add_argument("--phase", choices=["data","features","search","backtest","evaluate","all"], default="all")
-    args = parser.parse_args()
+    p = argparse.ArgumentParser(description="Local Perp Futures Engine - pipeline")
+    p.add_argument("--phase", choices=["data","features","search","backtest","evaluate","forward","portfolio","all"], default="all")
+    args = p.parse_args()
     run(args.phase)
 
 if __name__ == "__main__":
     main()
+
+
