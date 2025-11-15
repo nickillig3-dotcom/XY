@@ -1,0 +1,33 @@
+{
+  "status": "ok",
+  "lookback_days": 14,
+  "used": [
+    {
+      "key": "BTCUSDT|f5|s35|sl0.0100|15m",
+      "weight": 0.4,
+      "symbol": "BTCUSDT",
+      "timeframe": "15m",
+      "fast": 5,
+      "slow": 35,
+      "stop_loss_pct": 0.01
+    },
+    {
+      "key": "SOLUSDT|f4|s35|sl0.0200|15m",
+      "weight": 0.3350980795777058,
+      "symbol": "SOLUSDT",
+      "timeframe": "15m",
+      "fast": 4,
+      "slow": 35,
+      "stop_loss_pct": 0.02
+    },
+    {
+      "key": "SOLUSDT|f7|s31|sl0.0150|5m",
+      "weight": 0.26490192042229416,
+      "symbol": "SOLUSDT",
+      "timeframe": "5m",
+      "fast": 7,
+      "slow": 31,
+      "stop_loss_pct": 0.015
+    }
+  ]
+}

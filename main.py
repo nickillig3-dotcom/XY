@@ -1,5 +1,4 @@
-﻿# -*- coding: utf-8 -*-
-from __future__ import annotations
+﻿from __future__ import annotations
 import argparse, json
 from pathlib import Path
 from json import dumps, loads
@@ -11,9 +10,9 @@ from src.backtest import backtest_all
 from src.evaluation import evaluate_and_save
 from src.forward_test import forward_test_all, save_metrics_and_eval
 from src.portfolio_engine import build_portfolio
+from src.execution import run_paper
 
 def _key_no_tf(d: dict) -> str:
-    # Schl�ssel ohne timeframe, um Backtest/Forward-Listen robust zu schneiden
     return f"{d['symbol']}|{int(d['fast'])}|{int(d['slow'])}|{float(d['stop_loss_pct'])}"
 
 def run(phase: str):
@@ -70,7 +69,6 @@ def run(phase: str):
         print(f"[OK] Evaluation done. Accepted: {acc} / {len(df2)}")
 
     if phase in ("forward", "all"):
-        # Forward-Test nur auf Backtest-accepted laufen lassen (schneller & sinnvoll)
         acc_path = backtest_dir / "accepted_strategies.json"
         base_strats_path = backtest_dir / "strategies.json"
         from src.strategy_blocks import StrategyConfig
@@ -79,14 +77,12 @@ def run(phase: str):
         else:
             acc_data = loads(base_strats_path.read_text(encoding="utf-8"))
         strategies = [StrategyConfig(**d) for d in acc_data]
-
         df_fwd = forward_test_all(strategies, cfg, ohlcv_dir, oos_fraction=0.60)
         (forward_dir / "strategies.json").write_text(dumps([s.model_dump() for s in strategies], indent=2), encoding="utf-8")
         save_metrics_and_eval(df_fwd, forward_dir / "strategies.json", forward_dir)
         print(f"[OK] Forward-test done -> {forward_dir / 'metrics.csv'}")
 
     if phase in ("portfolio", "all"):
-        # Wenn Forward-Akzeptierte existieren, benutze Schnittmenge BacktestnForward
         bt_acc_f = backtest_dir / "accepted_strategies.json"
         fwd_acc_f = forward_dir / "accepted_strategies.json"
         use_forward = fwd_acc_f.exists() and fwd_acc_f.read_text(encoding="utf-8").strip() not in ("", "[]")
@@ -100,7 +96,7 @@ def run(phase: str):
             tmp = port_dir / "accepted_intersection.json"
             tmp.write_text(dumps(inter, indent=2), encoding="utf-8")
             src_for_portfolio = tmp
-            print(f"[OK] Using intersection BacktestnForward -> {tmp}")
+            print(f"[OK] Using intersection Backtest&Forward -> {tmp}")
 
         res, port_eq = build_portfolio(cfg, src_for_portfolio, ohlcv_dir,
                                        corr_cap=0.60, max_w=0.40, market_cap=0.60)
@@ -114,13 +110,15 @@ def run(phase: str):
                 print(f"[OK] Saved weights -> {port_dir / 'selection.json'}")
                 print(f"[OK] Saved equity  -> {port_dir / 'portfolio_equity.parquet'}")
 
+    if phase in ("paper", "all"):
+        out = run_paper(lookback_days=14)
+        print(f"[OK] Paper run: {out}")
+
 def main():
     p = argparse.ArgumentParser(description="Local Perp Futures Engine - pipeline")
-    p.add_argument("--phase", choices=["data","features","search","backtest","evaluate","forward","portfolio","all"], default="all")
+    p.add_argument("--phase", choices=["data","features","search","backtest","evaluate","forward","portfolio","paper","all"], default="all")
     args = p.parse_args()
     run(args.phase)
 
 if __name__ == "__main__":
     main()
-
-

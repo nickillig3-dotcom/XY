@@ -95,6 +95,15 @@ Portfolio construction (in `portfolio_engine.py`) must respect:
     - their combined weight should be limited or one excluded.
 
 These constraints aim at **robust, diversified portfolios**, not single-strategy bets.
+**Current working defaults (v0.1):**
+- starting_capital = 10,000 USDT
+- risk_per_trade_target = 1.0% (hard max 2.0%)
+- max_leverage (system) = 5x
+- portfolio caps: max_w_per_strategy = 0.40, max_w_per_market = 0.60
+- correlation cap (strategy equity curves) = 0.60
+- timeframes used today: 5m, 15m (aggregated from 1m core data)
+- forward OOS fraction = 0.60
+- search: ~20 candidates per symbol per run (coarse), then refine
 
 ---
 

@@ -31,9 +31,9 @@
     /raw                        # Raw exchange data (downloaded)
     /processed                  # Cleaned/normalized data
   /results
-    /backtests                  # Strategy backtest results
-    /forward_tests              # Forward test results
-    /portfolios                 # Portfolio construction results (weights, metrics)
-    /paper_trading              # Paper trading logs
+    /backtests        # metrics.csv, accepted_strategies.json
+    /forward_tests    # metrics.csv, accepted_strategies.json
+    /portfolios       # selection.json (weights), accepted_intersection.json, portfolio_equity.parquet
+    /paper_trading    # paper_equity.parquet, trades.csv, trade_summary.csv, trades_by_bucket.csv
     /live_trading               # Live trading logs & reports
     /logs                       # General logs

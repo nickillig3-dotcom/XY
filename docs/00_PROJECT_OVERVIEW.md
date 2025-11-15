@@ -123,6 +123,10 @@ Portfolio-level optimization:
 - The resulting `PortfolioConfig` will be used in:
   - paper trading,
   - and later live trading.
+**Implementation note (current defaults):**
+- All simulations include **fees, slippage and funding** costs.
+- **Portfolio selection uses the intersection of Backtest-accepted AND Forward-accepted strategies** (Backtest ∩ Forward).
+- The current correlation cap is **0.60** at the portfolio step; max weight per strategy **0.40**; per market **0.60**.
 
 ### 4.3 Search Intelligence (Strategy Search Layer)
 

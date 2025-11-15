@@ -205,6 +205,9 @@ These rules are part of the prompting environment for any future ChatGPT usage i
 3. [ ] Builds at least one valid `PortfolioConfig` and computes `PortfolioResult`.
 
 **Output:** Portfolio configs and metrics under `/results/portfolios`.
+- Forward testing uses an OOS share of **~60%** of the available window for acceptance checks.
+- Portfolio is built from **Backtest ∩ Forward** accepted strategies.
+- Paper trading aggregates **weighted returns** on the union of bar timestamps to avoid alignment artefacts; logs per-trade events to `trades.csv` and writes summaries.
 
 ---
 
@@ -252,4 +255,7 @@ These rules are part of the prompting environment for any future ChatGPT usage i
   - search intelligence requirements,
   - AI behaviour rules.
 
+
 → Used by all implementations and by any ChatGPT prompt relating to this project.
+- Correlation cap (portfolio): default **0.60** (configurable).
+- Market cap (per market): default **0.60** (configurable); Strategy cap: **0.40**.
