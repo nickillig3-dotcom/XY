@@ -1,6 +1,7 @@
 ﻿from __future__ import annotations
 from pathlib import Path
-import time, json, datetime, subprocess
+import time, json, subprocess
+from datetime import datetime, timezone
 from src.config_extras import load_extras
 from src.execution import run_paper
 
@@ -13,7 +14,7 @@ def main():
     print(f"[loop] lookback_days={lb_days} | interval={interval}s | analyze_trades={do_analyze}")
     try:
         while True:
-            ts = datetime.datetime.utcnow().isoformat(timespec="seconds") + "Z"
+            ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
             out = run_paper(lookback_days=lb_days)
             print(f"[{ts}] Paper run -> {out}")
             if do_analyze:

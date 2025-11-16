@@ -1,0 +1,48 @@
+{
+  "equity": 9932.14885332661,
+  "positions": {
+    "SOLUSDT|f14|s29|sl0.0100|15m": {
+      "side": 1,
+      "qty": 12.498464063747042,
+      "entry_px": 311.8204228264935,
+      "stop_px": 308.640491,
+      "opened_at": "2025-11-16T16:59:08Z",
+      "last_checked": "2025-11-16T16:59:08Z"
+    },
+    "BTCUSDT|f18|s37|sl0.0100|15m": {
+      "side": -1,
+      "qty": 0.011738732517187371,
+      "entry_px": 200778.28556753052,
+      "stop_px": 202826.63375,
+      "opened_at": "2025-11-16T16:59:08Z",
+      "last_checked": "2025-11-16T16:59:08Z"
+    }
+  },
+  "processed_signals": [
+    "2025-11-16T17:26:03Z|SOLUSDT|f14|s29|sl0.0100|15m|entry_short",
+    "2024-02-15T00:00:00+00:00|BTCUSDT|f18|s37|sl0.0100|15m|entry_long",
+    "2025-11-16T17:19:45Z|SOLUSDT|f14|s29|sl0.0100|15m|entry_short",
+    "2024-02-15T03:00:00+00:00|SOLUSDT|f14|s29|sl0.0100|15m|entry_short",
+    "2025-11-16T16:41:29Z|BTCUSDT|f18|s37|sl0.0100|15m|entry_short",
+    "2025-11-16T17:26:07Z|SOLUSDT|f14|s29|sl0.0100|15m|entry_short",
+    "2024-02-14T23:45:00+00:00|BTCUSDT|f16|s43|sl0.0050|15m|entry_long",
+    "2025-11-16T16:53:11Z|SOLUSDT|f14|s29|sl0.0100|15m|entry_short",
+    "2025-11-16T17:19:51Z|BTCUSDT|f18|s37|sl0.0100|15m|entry_long",
+    "2025-11-16T17:23:34Z|BTCUSDT|f18|s37|sl0.0100|15m|entry_long",
+    "2024-02-14T23:30:00+00:00|BTCUSDT|f17|s60|sl0.0100|15m|entry_long",
+    "2025-11-16T16:53:11Z|BTCUSDT|f18|s37|sl0.0100|15m|entry_long",
+    "2025-11-16T17:26:07Z|BTCUSDT|f18|s37|sl0.0100|15m|entry_long",
+    "2025-11-16T16:59:08Z|SOLUSDT|f14|s29|sl0.0100|15m|entry_long",
+    "2025-11-16T17:26:03Z|BTCUSDT|f18|s37|sl0.0100|15m|entry_long",
+    "2025-11-16T17:19:51Z|SOLUSDT|f14|s29|sl0.0100|15m|entry_short",
+    "2025-11-16T17:23:34Z|SOLUSDT|f14|s29|sl0.0100|15m|entry_short",
+    "2025-11-16T16:59:08Z|BTCUSDT|f18|s37|sl0.0100|15m|entry_short",
+    "2025-11-16T17:19:45Z|BTCUSDT|f18|s37|sl0.0100|15m|entry_long",
+    "2025-11-16T17:23:41Z|SOLUSDT|f14|s29|sl0.0100|15m|entry_short",
+    "2025-11-16T17:23:41Z|BTCUSDT|f18|s37|sl0.0100|15m|entry_long",
+    "2025-11-16T16:41:29Z|SOLUSDT|f14|s29|sl0.0100|15m|entry_long"
+  ],
+  "day_tag": "2025-11-16",
+  "day_start_equity": 9996.079215686275,
+  "realized_today": -53.51173364654504
+}

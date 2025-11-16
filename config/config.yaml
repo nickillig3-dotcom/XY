@@ -1,34 +1,36 @@
 ﻿markets:
-  - BTCUSDT
-  - ETHUSDT
-  - SOLUSDT
-
+- BTCUSDT
+- ETHUSDT
+- SOLUSDT
 paths:
-  raw: "./data/raw"
-  processed: "./data/processed"
-
+  raw: ./data/raw
+  processed: ./data/processed
 risk:
   starting_capital: 10000
-  risk_per_trade_target: 0.01   # 1.0% Ziel (zulässiges Band 0.25–1.5%)
-  risk_per_trade_max: 0.02      # 2.0% Hard Cap
-  max_leverage: 5               # System Cap 5x
-# ---- optional tuning (added by patches) ----
+  risk_per_trade_target: 0.01
+  risk_per_trade_max: 0.02
+  max_leverage: 5
 portfolio:
-  correlation_cap: 0.60
-  max_weight_per_strategy: 0.40
-  max_weight_per_market: 0.60
-
+  correlation_cap: 0.6
+  max_weight_per_strategy: 0.4
+  max_weight_per_market: 0.6
 forward:
   n_splits: 3
   min_passes: 2
-  n_splits: 3
-  min_passes: 2
-  oos_fraction: 0.60
-
+  oos_fraction: 0.6
 paper:
   poll_seconds: 300
   analyze_trades: true
   lookback_days: 30
+live:
+  daily_loss_limit_pct: 0.02
+  max_notional: 10000
+  use_portfolio_weights: true
+
+
+
+
+
 
 
 

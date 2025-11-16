@@ -1,0 +1,28 @@
+﻿**********************
+nStart der Windows PowerShell-Aufzeichnung
+Startzeit: 20251116175319
+Benutzername: DESKTOP-E2EF7ED\nicki
+RunAs-Benutzer: DESKTOP-E2EF7ED\nicki
+Konfigurationsname: 
+Computer: DESKTOP-E2EF7ED (Microsoft Windows NT 10.0.19045.0)
+Hostanwendung: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noexit -command try { . "c:\Users\nicki\AppData\Local\Programs\Microsoft VS Code\resources\app\out\vs\workbench\contrib\terminal\common\scripts\shellIntegration.ps1" } catch {}
+Prozess-ID: 14552
+PSVersion: 5.1.19041.6456
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.19041.6456
+BuildVersion: 10.0.19041.6456
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Die Aufzeichnung wurde gestartet. Die Ausgabedatei ist ".\results\live\logs\live_20251116-175319.log".
+>>> tick 2025-11-16T17:53:19
+
+
+
+PS>TerminatingError(): "Die Pipeline wurde beendet."
+**********************
+Ende der Windows PowerShell-Aufzeichnung
+Endzeit: 20251116175358
+**********************
